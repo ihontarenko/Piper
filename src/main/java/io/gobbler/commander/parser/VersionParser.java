@@ -1,17 +1,18 @@
 package io.gobbler.commander.parser;
 
-import io.gobbler.commander.ast.AstNode;
-import io.gobbler.commander.ast.VersionNode;
+import java.util.function.Predicate;
 
-public class VersionParser extends Parser<String, VersionNode> {
+public class VersionParser extends Parser {
 
     @Override
-    public VersionNode process(String source) {
-        return new VersionNode(source);
+    public void handle(ObjectNode value, ParserContext context) {
+        System.out.println("VersionParser: " + value);
     }
 
     @Override
-    public Class<?> getType() {
-        return String.class;
+    public Predicate<ObjectNode> getPredicate() {
+        return super.getPredicate()
+                .and(value -> value.get(String.class).equalsIgnoreCase("version"));
     }
+
 }

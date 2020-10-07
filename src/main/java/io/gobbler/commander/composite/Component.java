@@ -1,10 +1,10 @@
 package io.gobbler.commander.composite;
 
-public interface Component<V, C extends Component.Context> {
+public interface Component<S, C extends Component<?, C, X>, X extends Component.Context> {
 
-    void addChild(Component<Object, C> child);
+    void addChild(C child);
 
-    void handle(V value, C context);
+    void handle(S value, X context);
 
     interface Context {
 

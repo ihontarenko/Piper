@@ -2,10 +2,12 @@ package io.gobbler.commander.node;
 
 public interface Node<K, V> {
 
-    K getKey();
+    K key();
 
-    V getValue();
+    <T> T get();
 
-    void setValue(V value);
+    <T> T get(Class<T> type);
+
+    V set(V value);
 
 }

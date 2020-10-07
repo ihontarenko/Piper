@@ -1,41 +1,35 @@
 package io.gobbler.commander.parser;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 
-public class RootParser extends Parser<Map<String, Object>> {
+import static java.util.function.Predicate.not;
+
+public class RootParser extends Parser {
 
     @Override
-    public Predicate<Map<String, Object>> isApplicable(Map<String, Object> value) {
-        return super.isApplicable(value).and(Predicate.not(Map::isEmpty));
+    public Predicate<ObjectNode> getPredicate() {
+        return super.getPredicate().and(not(value -> value.get(Map.class).isEmpty()));
     }
 
     @Override
-    public void handle(Map<String, Object> value, ParserContext context) {
+    public void handle(ObjectNode value, ParserContext context) {
+        for (Map.Entry<String, ObjectNode> entry : value.<Map<String, ObjectNode>>get().entrySet()) {
+            boolean undefined = true;
 
+            for (Parser child : children) {
+                if (child.getPredicate().test(new ObjectNode("key", entry.getKey()))) {
+                    System.out.println("root-parser found: " + child.getClass());
+                    child.handle(entry.getValue(), context);
+                    undefined = false;
+                    break;
+                }
+            }
+
+            if (undefined) {
+                throw new ParseException(this, entry.getKey());
+            }
+        }
     }
-
-    //    @Override
-//    public RootNode process(Map<String, Object> source) {
-//
-//        source.forEach((name, value) -> {
-//
-//            for (var child : children) {
-//                if (child.isApplicable(value)) {
-//                    child.process(value);
-//                }
-//            }
-//
-//        });
-//
-//        return null;
-//    }
-
-//    @Override
-//    public boolean isApplicable(Map<String, Object> source) {
-//        throw new UnsupportedOperationException("ROOT PARSER DOESNT RESPONSIBLE FOR ANYONE BLOCK");
-//    }
 
 }

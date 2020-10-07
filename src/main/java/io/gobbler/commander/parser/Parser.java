@@ -5,10 +5,13 @@ import io.gobbler.commander.composite.AbstractComponent;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-abstract public class Parser<S> extends AbstractComponent<S, ParserContext> {
+import static java.util.Objects.nonNull;
 
-    public Predicate<S> isApplicable(S value) {
-        return Objects::nonNull;
+abstract public class Parser
+        extends AbstractComponent<ObjectNode, Parser, ParserContext> {
+
+    public Predicate<ObjectNode> getPredicate() {
+        return (value) -> nonNull(value) && nonNull(value.getValue());
     }
 
 }
