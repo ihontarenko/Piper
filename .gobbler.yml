@@ -1,0 +1,70 @@
+version: '1.0.0'
+
+gobbler:
+
+  build:
+    ~
+
+  environment:
+    global:
+      JAVA_HOME_DIR: ${env.JAVA_HOME}
+      JAVA_COM: "${env.JAVA_HOME}/bin/java -jar"
+      WIN_PROGRAM_FILES: "C:\\Program Files"
+    compile:
+      ~
+
+  programs:
+    docker-bin: "docker exec -it"
+    gobbler: "java -jar ./bin/gobbler.jar go"
+    bin: "${WIN_PROGRAM_FILES}\\Git\\git-cmd.exe"
+    bash: "${WIN_PROGRAM_FILES}\\Git\\git-bash.exe"
+
+  commands:
+    
+    cd-status:
+      target: bin
+      strategy: consistent
+      scripts:
+        - 'echo "[CURRENT DIRECTORY STATUS]"'
+        - "ls -la"
+        - "du -h ."
+
+    health-check:
+      description: "Check Health Of All Applications"
+      properties:
+        JAVA_RUN: "${env.JAVA_HOME}/bin/java -jar"
+      scripts:
+        - "${bash} ./healthCheck.sh"
+
+    start-mariadb:
+      strategy: parallel
+      scripts:
+        - "cd-status"
+        - "docker-compose up -d dcp-mariadb"
+        - "${gobbler.programs.bash} ./healthCheck.sh"
+
+    start-couchbase:
+      strategy: consistent
+      scripts:
+        - "cd-status"
+        - "docker-compose up -d dcp-couchbase-server"
+        - "${gobbler.programs.bash} dcp-couchbase-server top -s 10"
+
+    start-databases:
+      strategy:
+        name: parallel
+        counter: 5
+      scripts:
+        - "start-mariadb"
+        - "start-couchbase"
+
+    start-consul:
+      strategy: consistent
+      scripts:
+        - "docker-compose up -d dcp-consul"
+
+    start-main:
+      strategy: consistent
+      scripts:
+        - "start-consul"
+        - "start-databases"
