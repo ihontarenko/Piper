@@ -11,10 +11,8 @@ public class CommandListParser extends Parser {
     public void handle(ObjectNode node, ParserContext context) {
         System.out.println("Tasks: " + node.get());
 
-        node.<Map<String, ObjectNode>>get().forEach((name, definition) -> {
-            System.out.println("task:" + definition.key());
-            super.handle(definition, context);
-        });
+        node.<Map<String, ObjectNode>>get().forEach((name, definition)
+                -> super.handle(definition, context));
     }
 
     @Override
