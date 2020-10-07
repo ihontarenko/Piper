@@ -3,30 +3,42 @@ package io.gobbler.commander.convert;
 import io.gobbler.commander.parser.ObjectNode;
 import io.gobbler.commons.Converter;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Map.of;
 
 public class MapToObjectNodeConverter implements Converter<Map<String, Object>, ObjectNode> {
 
     @Override
     public ObjectNode convert(Map<String, Object> source) {
-        ObjectNode root = new ObjectNode("root", null);
+        ObjectNode root = new ObjectNode("ROOT", null);
 
-        wrap(of("root", source), root);
+        wrap(source, root);
+        root.setType(source.getClass());
 
         return root;
     }
 
-    private void wrap(Map<String, ?> input, ObjectNode node) {
+    private ObjectNode wrap(Map<String, ?> input, ObjectNode node) {
+        Map<String, ObjectNode> wrapper = new HashMap<>();
+
         for (Map.Entry<String, ?> entry : input.entrySet()) {
+            ObjectNode value = new ObjectNode(entry.getKey(), null);
+
             if (entry.getValue() instanceof Map) {
-                wrap((Map<String, ?>) entry.getValue(), new ObjectNode(entry.getKey(), null));
+                wrapper.put(entry.getKey(), wrap((Map<String, ?>) entry.getValue(), value));
             } else {
-                node.set(entry.getValue());
+                value.setValue(entry.getValue());
+                wrapper.put(entry.getKey(), value);
+            }
+
+            if (entry.getValue() != null) {
+                value.setType(entry.getValue().getClass());
             }
         }
+
+        node.set(wrapper);
+
+        return node;
     }
 
 }

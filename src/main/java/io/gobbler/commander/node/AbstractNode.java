@@ -3,6 +3,8 @@ package io.gobbler.commander.node;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
 
+import static java.lang.String.format;
+
 @SuppressWarnings({"unused"})
 abstract public class AbstractNode<K, V> extends SimpleEntry<K, V> implements Node<K, V> {
 
@@ -33,6 +35,11 @@ abstract public class AbstractNode<K, V> extends SimpleEntry<K, V> implements No
     @Override
     public V set(V value) {
         return super.setValue(value);
+    }
+
+    @Override
+    public String toString() {
+        return format("Node: {MapEntry: %s}", super.toString());
     }
 
 }

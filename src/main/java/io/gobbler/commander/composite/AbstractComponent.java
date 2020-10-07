@@ -8,8 +8,10 @@ abstract public class AbstractComponent<S, C extends Component<?, C, X>, X exten
     protected List<C> children = new ArrayList<>();
 
     @Override
-    public void addChild(C child) {
+    public C addChild(C child) {
         children.add(child);
+
+        return (C) this;
     }
 
 }

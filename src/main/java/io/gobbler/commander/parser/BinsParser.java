@@ -2,19 +2,19 @@ package io.gobbler.commander.parser;
 
 import java.util.function.Predicate;
 
-import static io.gobbler.commander.parser.Keywords.VERSION;
+import static io.gobbler.commander.parser.Keywords.BINS;
 
-public class VersionParser extends Parser {
+public class BinsParser extends Parser {
 
     @Override
     public void handle(ObjectNode node, ParserContext context) {
-        System.out.println("Version: " + node.get(String.class));
+        System.out.println("Bins: " + node.get());
     }
 
     @Override
     public Predicate<ObjectNode> getPredicate() {
         return super.getPredicate()
-                .and(value -> VERSION.match(value.key()));
+                .and(value -> BINS.match(value.key()));
     }
 
 }

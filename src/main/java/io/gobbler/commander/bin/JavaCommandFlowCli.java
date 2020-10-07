@@ -6,8 +6,7 @@ import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
 import io.gobbler.commander.lifecycle.WrapperMiddleware;
-import io.gobbler.commander.parser.ObjectNode;
-import io.gobbler.commander.parser.RootParser;
+import io.gobbler.commander.parser.*;
 import io.gobbler.commander.proprties.BuildInfoProperties;
 import io.gobbler.commander.proprties.CommandProperties;
 
@@ -28,14 +27,19 @@ public class JavaCommandFlowCli {
                 new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
         );
 
-        System.out.println(new MapToObjectNodeConverter().convert(values));
-
-        System.exit(1);
-
+        ObjectNode node = new MapToObjectNodeConverter().convert(values);
         RootParser root = new RootParser();
 
-        root.handle(new ObjectNode("root", values), null);
+        root.addChild(new VersionParser());
+        root.addChild(new EnvironmentParser());
+        root.addChild(new BinsParser());
+        root.addChild(new CommandListParser()
+                .addChild(new CommandStrategyParser()));
+        root.addChild(new BuildInfoParser());
 
+        root.handle(node, null);
+
+        System.exit(1);
 
         context.setRawConfiguration(values);
 
