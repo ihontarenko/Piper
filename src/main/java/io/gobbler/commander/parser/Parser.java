@@ -1,35 +1,14 @@
 package io.gobbler.commander.parser;
 
-import io.gobbler.commander.Composite;
-import io.gobbler.commander.Processor;
-import io.gobbler.commander.ast.AstNode;
+import io.gobbler.commander.composite.AbstractComponent;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
-abstract public class Parser<S, R>
-        implements Composite<Parser>, Processor<S, R>
-{
+abstract public class Parser<S> extends AbstractComponent<S, ParserContext> {
 
-    protected List<Parser> children;
-
-    @Override
-    public void add(P parser) {
-        children.add(parser);
-    }
-
-    @Override
-    public boolean has(P parser) {
-        return false;
-    }
-
-    @Override
-    public void remove(P parser) {
-
-    }
-
-    @Override
-    public Class<?> getType() {
-        return Object.class;
+    public Predicate<S> isApplicable(S value) {
+        return Objects::nonNull;
     }
 
 }
