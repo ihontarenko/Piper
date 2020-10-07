@@ -1,34 +1,23 @@
 package io.gobbler.commander.bin;
 
 import io.gobbler.commander.Context;
-import io.gobbler.commander.convert.RawMapToNodesConverter;
+import io.gobbler.commander.convert.MapToObjectNodeConverter;
 import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
 import io.gobbler.commander.lifecycle.WrapperMiddleware;
 import io.gobbler.commander.parser.ObjectNode;
 import io.gobbler.commander.parser.RootParser;
-import io.gobbler.commander.parser.VersionParser;
 import io.gobbler.commander.proprties.BuildInfoProperties;
 import io.gobbler.commander.proprties.CommandProperties;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static io.gobbler.commander.Constants.DEFAULT_CONFIGURATION_FILE_NAME;
 
 public class JavaCommandFlowCli {
-
-    interface A {
-
-    }
-
-    static class B<I> {
-        public I value;
-    }
 
     public static void main(String... arguments) throws IOException {
 
@@ -39,13 +28,14 @@ public class JavaCommandFlowCli {
                 new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
         );
 
-        System.out.println(new RawMapToNodesConverter().convert(values));
+        System.out.println(new MapToObjectNodeConverter().convert(values));
+
+        System.exit(1);
 
         RootParser root = new RootParser();
 
         root.handle(new ObjectNode("root", values), null);
 
-        System.exit(1);
 
         context.setRawConfiguration(values);
 

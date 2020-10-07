@@ -32,7 +32,7 @@ gobbler:
     health-check:
       description: "Check Health Of All Applications"
       properties:
-        JAVA_RUN: "${env.JAVA_HOME}/bin/java -jar"
+        JAVA_RUN: "${env.JAVA_HOME}/bin/java ${cli.ARGUMENTS[2]} -jar ${ARGUMENTS[0]}"
       scripts:
         - "${bash} ./healthCheck.sh"
 
