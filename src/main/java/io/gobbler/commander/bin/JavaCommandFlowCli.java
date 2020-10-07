@@ -1,6 +1,7 @@
 package io.gobbler.commander.bin;
 
 import io.gobbler.commander.Context;
+import io.gobbler.commander.convert.RawMapToNodesConverter;
 import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
@@ -37,6 +38,8 @@ public class JavaCommandFlowCli {
         Map<String, Object> values = new SnakeYAMLParser().parse(
                 new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
         );
+
+        System.out.println(new RawMapToNodesConverter().convert(values));
 
         RootParser root = new RootParser();
 

@@ -18,7 +18,9 @@ public class RootParser extends Parser {
             boolean undefined = true;
 
             for (Parser child : children) {
-                if (child.getPredicate().test(new ObjectNode("key", entry.getKey()))) {
+                ObjectNode node = new ObjectNode(entry.getKey(), entry.getValue());
+
+                if (child.getPredicate().test(node)) {
                     System.out.println("root-parser found: " + child.getClass());
                     child.handle(entry.getValue(), context);
                     undefined = false;
