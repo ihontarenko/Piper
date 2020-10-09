@@ -5,10 +5,12 @@ public enum Keywords {
     // root keywords
     VERSION("version"),
     BUILD("build", "buildInfo"),
-    ENVIRONMENT("environment", "env"),
+    ENVIRONMENT("environment", "env", "properties"),
     BINS("bin", "programs"),
     COMMANDS("commands", "tasks"),
     // commands keywords
+    SCRIPTS("scripts"),
+    DESCRIPTION("description"),
     STRATEGY("strategy");
 
     private final String[] names;

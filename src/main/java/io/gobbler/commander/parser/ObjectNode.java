@@ -1,6 +1,6 @@
 package io.gobbler.commander.parser;
 
-import io.gobbler.commander.node.ValueNode;
+import io.gobbler.commander.common.node.ValueNode;
 
 import static java.lang.String.format;
 

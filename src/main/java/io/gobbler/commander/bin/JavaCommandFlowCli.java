@@ -1,77 +1,115 @@
 package io.gobbler.commander.bin;
 
-import io.gobbler.commander.Context;
-import io.gobbler.commander.convert.MapToObjectNodeConverter;
+import io.gobbler.commander.converter.KeyAbbreviationConverter;
+import io.gobbler.commander.converter.MapToObjectNodeConverter;
+import io.gobbler.commander.converter.NestedMapToFlatMapConverter;
+import io.gobbler.commander.executor.StreamLinesExecutor;
 import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
-import io.gobbler.commander.lifecycle.WrapperMiddleware;
 import io.gobbler.commander.parser.*;
-import io.gobbler.commander.proprties.BuildInfoProperties;
-import io.gobbler.commander.proprties.CommandProperties;
+import org.apache.commons.text.StringSubstitutor;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import static io.gobbler.commander.Constants.DEFAULT_CONFIGURATION_FILE_NAME;
 
 public class JavaCommandFlowCli {
 
-    public static void main(String... arguments) throws IOException {
+    public static void main(String... arguments) throws IOException, InterruptedException {
 
-        Context context = new Context();
         SnakeYAMLDumper dumper = new SnakeYAMLDumper();
 
         Map<String, Object> values = new SnakeYAMLParser().parse(
                 new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
         );
 
+        List<Object> strings = new ArrayList<>();
+
+        strings.add("123qwe");
+        strings.add("qwe123");
+        strings.add("123123");
+        strings.add(new HashMap<>() {{
+            put("v1", "123");
+            put("keys", "aaaaa");
+        }});
+
+        Map<String, Object> rootData = new HashMap<>() {{
+            put("str", getClass().getName());
+            put("sub", new HashMap<>() {{
+                put("v1", "[Version: 4.0]");
+                put("keys", strings);
+            }});
+        }};
+
+        new NestedMapToFlatMapConverter("env", ".").convert(System.getenv());
+
+        String template = "test vars: JAVA_HOME: ${env:JAVA_HOME} | gobbler yaml version = ${version} | get script [[ ${PPTY/BASH_CMD_WINDOWS} ]] finish";
+
+        String result = StringSubstitutor.replace(template, new NestedMapToFlatMapConverter(null, "/").convert(
+                new KeyAbbreviationConverter(new HashMap<>() {{
+                    put("programs", "BIN");
+                    put("properties", "PPTY");
+                    put("commands", "CMD");
+                }}).convert(values)
+        ));
+
+        result = StringSubstitutor.replace(result, new NestedMapToFlatMapConverter("env:", ".").convert(System.getenv()));
+
+//        new NestedMapToFlatMapConverter(null, ".").convert(
+//                new KeyAbbreviationConverter(new HashMap<>(){{
+//                    put("programs", "BIN");
+//                    put("properties", "PPTY");
+//                    put("commands", "CMD");
+//                }}).convert(values)
+//        ).forEach((s, o) -> {
+//            System.out.println(s);
+//        });
+//
+        System.out.println(result);
+
+
+//        SnakeYAMLDumper dumper = new SnakeYAMLDumper();
+//
+//        Map<String, Object> values = new SnakeYAMLParser().parse(
+//                new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
+//        );
+//
         ObjectNode node = new MapToObjectNodeConverter().convert(values);
         RootParser root = new RootParser();
 
         root.addChild(new VersionParser());
-        root.addChild(new EnvironmentParser());
+        root.addChild(new EnvParser());
         root.addChild(new BinsParser());
         root.addChild(new CommandListParser()
-                .addChild(new CommandStrategyParser()));
+                .addChild(new CommandScriptsParser())
+                .addChild(new CommandDescriptionParser())
+                .addChild(new CommandEnvParser()));
         root.addChild(new BuildInfoParser());
 
-        root.handle(node, null);
+        root.handle(node, new ParserContext());
 
-        System.exit(1);
-
-        context.setRawConfiguration(values);
-
-        new WrapperMiddleware().next(context.getGlobal());
-
-        BuildInfoProperties buildInfo = context.getGlobal().getBuildInfo();
-
-        buildInfo.setOsName("Win");
-        buildInfo.setTimestamp(String.valueOf(Instant.now().getEpochSecond()));
-        buildInfo.setAuthor(String.valueOf(Instant.now().getEpochSecond()));
-
-        System.out.println("================");
-        System.out.println(
-                dumper.dump(buildInfo)
-        );
-        System.out.println("================");
-
-
-        context.getGlobal()
-                .getCommands().forEach((s, stringMap) -> {
-
-            System.out.println(
-                    new CommandProperties(stringMap).getScripts()
-            );
-        });
-
-
-        System.out.println(
-                dumper.dump(
-                        context.getGlobal()
-                )
-        );
+//        context.setRawConfiguration(values);
+//
+//        context.getGlobal()
+//                .getCommands().forEach((s, stringMap) -> {
+//
+//            System.out.println(
+//                    new CommandProperties(stringMap).getScripts()
+//            );
+//        });
+//
+//
+//        System.out.println(
+//                dumper.dump(
+//                        context.getGlobal()
+//                )
+//        );
 
 //        System.out.println(
 //                context.getRawConfiguration().getCommands()
@@ -156,32 +194,20 @@ public class JavaCommandFlowCli {
 //        boolean isWindows = System.getProperty("os.name")
 //                .toLowerCase().startsWith("windows");
 //
-//        ProcessBuilder builder = new ProcessBuilder();
-//
-////        if (isWindows) {
-////            builder.command("cmd.exe", "/c", "dir");
-////        } else {
-////            builder.command("sh", "-c", "ls");
-////        }
-//
-////        builder.command("ls -la");
-////        C:\\\\Program Files\\\\Git\\\\git-bash.exe
-//        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
-////        builder.command("pwd");
-//
-////        builder.directory(new File(System.getProperty("user.home")));
-//
-//        Process process = builder.start();
-//
-////        StreamGobbler streamGobbler =
-////                new StreamGobbler(process.getInputStream(), s -> {
-////                    String line = "LINE: " + s;
-////                    System.out.println(line);
-////                });
-////
-////        Executors.newSingleThreadExecutor().submit(streamGobbler);
+        ProcessBuilder builder = new ProcessBuilder();
 
-//        System.exit(process.waitFor());
+//        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
+        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
+
+        System.out.println("before");
+        Process process = builder.start();
+        System.out.println("after");
+
+        Executors.newFixedThreadPool(5).submit(
+                new StreamLinesExecutor(process.getInputStream(), System.out::println)
+        );
+
+        System.exit(process.waitFor());
     }
 
 }
