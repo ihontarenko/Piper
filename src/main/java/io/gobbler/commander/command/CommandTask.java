@@ -1,5 +1,7 @@
 package io.gobbler.commander.command;
 
+import io.gobbler.commander.Properties;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +12,13 @@ public class CommandTask {
     private String              name;
     private String              description;
     private List<CommandScript> scripts;
+    private Properties<String>  environment;
 
     public CommandTask(String name, String description) {
         this.name = name;
         this.description = description;
         this.scripts = new ArrayList<>();
+        this.environment = new Properties<>();
     }
 
     public CommandTask(String name) {
@@ -31,6 +35,10 @@ public class CommandTask {
 
     public String getDescription() {
         return description;
+    }
+
+    public Properties<String> getEnvironment() {
+        return environment;
     }
 
     public void setDescription(String description) {
@@ -53,9 +61,17 @@ public class CommandTask {
         this.scripts.add(script);
     }
 
+    public void setEnvironment(Properties<String> environment) {
+        this.environment = environment;
+    }
+
+    public void setEnvironment(String name, String value) {
+        this.environment.put(name, value);
+    }
+
     @Override
     public String toString() {
-        return format("CMD_TASK: [%s <%s>, %s]", name, description, scripts);
+        return format("CMD_TASK: [%s <%s>, %s, %s]", name, description, scripts, environment);
     }
 
 }

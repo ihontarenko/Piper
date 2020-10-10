@@ -1,17 +1,17 @@
 package io.gobbler.commander.bin;
 
+import io.gobbler.commander.Command;
 import io.gobbler.commander.Properties;
 import io.gobbler.commander.ansi.AnsiColors;
-import io.gobbler.commander.Command;
 import io.gobbler.commander.common.Holder;
-import io.gobbler.commander.converter.KeyAbbreviationConverter;
-import io.gobbler.commander.converter.MapToObjectNodeConverter;
 import io.gobbler.commander.converter.FlattenMapConverter;
+import io.gobbler.commander.converter.KeyAbbreviationConverter;
+import io.gobbler.commander.converter.WrapHolderConverter;
+import io.gobbler.commander.converter.text.AnsiTextConverter;
 import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
 import io.gobbler.commander.parser.*;
-import io.gobbler.commander.converter.text.AnsiTextConverter;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.*;
 import org.apache.commons.text.StringSubstitutor;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.gobbler.commander.Constants.DEFAULT_CONFIGURATION_FILE_NAME;
+import static io.gobbler.commander.common.Holder.of;
 import static java.lang.String.format;
 
 public class JavaCommandFlowCli {
@@ -132,7 +133,7 @@ public class JavaCommandFlowCli {
 //                new YamlLoader().load(DEFAULT_CONFIGURATION_FILE_NAME)
 //        );
 //
-        ObjectNode node = new MapToObjectNodeConverter().convert(values);
+        Holder     node = new WrapHolderConverter().convert(values);
         RootParser root = new RootParser();
 
         root.addChild(new VersionParser());
@@ -145,7 +146,16 @@ public class JavaCommandFlowCli {
                 .addChild(new CommandEnvParser()));
         root.addChild(new BuildInfoParser());
 
-        root.handle(node, Holder.of(new Properties<>()));
+        root.handle(node, of(new Properties<>()));
+
+        System.out.println("new EnvParser() >>>");
+
+        Properties<String> envs = new Properties<>();
+
+        new EnvParser().handle(
+                new WrapHolderConverter().convert((Map<String, Object>) values.get("properties")), of(envs));
+
+        System.out.println("new EnvParser() <<<");
 
 //        context.setRawConfiguration(values);
 //

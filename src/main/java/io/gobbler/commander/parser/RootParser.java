@@ -10,13 +10,13 @@ import static java.util.function.Predicate.not;
 public class RootParser extends Parser {
 
     @Override
-    public Predicate<ObjectNode> getPredicate() {
-        return super.getPredicate().and(not(value -> value.get(Map.class).isEmpty()));
+    public Predicate<Holder> getPredicate() {
+        return super.getPredicate().and(not(value -> value.<Map>get().isEmpty()));
     }
 
     @Override
-    public void handle(ObjectNode node, Holder value) {
-        super.handle(node, value);
+    public void handle(Holder node, Holder holder) {
+        super.handle(node, holder);
     }
 
 }

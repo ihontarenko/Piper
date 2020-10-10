@@ -1,8 +1,10 @@
 package io.gobbler.commander.parser;
 
-import io.gobbler.commander.Properties;
+import io.gobbler.commander.command.CommandScript;
+import io.gobbler.commander.command.CommandTask;
 import io.gobbler.commander.common.Holder;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import static io.gobbler.commander.parser.Keywords.SCRIPTS;
@@ -10,14 +12,17 @@ import static io.gobbler.commander.parser.Keywords.SCRIPTS;
 public class CommandScriptsParser extends Parser {
 
     @Override
-    public void handle(ObjectNode node, Holder value) {
-        System.out.println("CommandScriptsParser: " + value);
-        System.out.println("CommandScriptsParser is Properties: " + value.is(Properties.class));
+    public void handle(Holder node, Holder holder) {
+        if (node.is(List.class) && holder.is(CommandTask.class)) {
+            for (String line : node.<List<String>>get()) {
+                holder.<CommandTask>get().addScript(new CommandScript(line));
+            }
+        }
     }
 
     @Override
-    public Predicate<ObjectNode> getPredicate() {
-        return value -> SCRIPTS.match(value.key());
+    public Predicate<Holder> getPredicate() {
+        return value -> SCRIPTS.match(value.inner().get());
     }
 
 }

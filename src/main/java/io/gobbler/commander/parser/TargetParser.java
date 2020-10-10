@@ -9,14 +9,14 @@ import static io.gobbler.commander.parser.Keywords.TARGET;
 public class TargetParser extends Parser {
 
     @Override
-    public void handle(ObjectNode node, Holder value) {
+    public void handle(Holder node, Holder holder) {
         System.out.println("TargetParser: " + node);
     }
 
     @Override
-    public Predicate<ObjectNode> getPredicate() {
+    public Predicate<Holder> getPredicate() {
         return super.getPredicate()
-                .and(value -> TARGET.match(value.key()));
+                .and(value -> TARGET.match(value.inner().get()));
     }
 
 }

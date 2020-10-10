@@ -10,31 +10,31 @@ import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 abstract public class Parser
-        extends AbstractComponent<ObjectNode, Parser, Holder> {
+        extends AbstractComponent<Holder, Parser, Holder> {
 
     @Override
-    public void handle(ObjectNode node, Holder value) {
-        requireNonNull(value, "VALUE CANNOT BE NULL");
+    public void handle(Holder node, Holder holder) {
+        requireNonNull(holder, "VALUE CANNOT BE NULL");
 
-        for (Map.Entry<String, ObjectNode> entry : node.<Map<String, ObjectNode>>get().entrySet()) {
+        for (Map.Entry<String, Holder> entry : node.<Map<String, Holder>>get().entrySet()) {
             boolean undefined = true;
 
             for (Parser child : children) {
                 if (child.getPredicate().test(entry.getValue())) {
-                    child.handle(entry.getValue(), value);
+                    child.handle(entry.getValue(), holder);
                     undefined = false;
                     break;
                 }
             }
 
             if (undefined) {
-                throw new ParseException(this, entry.getKey());
+                throw new SyntaxErrorException(this, entry.getKey());
             }
         }
     }
 
-    public Predicate<ObjectNode> getPredicate() {
-        return (value) -> nonNull(value) && nonNull(value.getValue());
+    public Predicate<Holder> getPredicate() {
+        return (value) -> nonNull(value) && nonNull(value.get());
     }
 
 }

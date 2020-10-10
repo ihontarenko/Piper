@@ -1,21 +1,42 @@
 package io.gobbler.commander.common;
 
 import static java.lang.String.format;
+import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings({"unchecked"})
 public class Holder {
 
-    private final Object value;
+    protected Holder inner;
+    protected Object value;
+
+    Holder(Object value, Object inner) {
+        this(value);
+        this.inner = new Holder(inner);
+    }
 
     Holder(Object value) {
-        requireNonNull(value, "UNABLE TO CREATE HOLDER OBJECT WITH NULL VALUE");
-
         this.value = value;
     }
 
-    @SuppressWarnings({"unchecked"})
+    public static Holder of(Object value, Object inner) {
+        return new Holder(value, inner);
+    }
+
+    public static Holder of(Object value) {
+        return of(value, null);
+    }
+
     public <V> V get() {
         return (V) value;
+    }
+
+    public <V> void set(V value) {
+        this.value = value;
+    }
+
+    public Holder inner() {
+        return this.inner;
     }
 
     public Class<?> type() {
@@ -23,17 +44,18 @@ public class Holder {
     }
 
     public boolean is(Class<?> type) {
-        requireNonNull(value, "UNABLE COMPARE HOLDER VALUE TYPE WITH NULL");
+        requireNonNull(type, "UNABLE COMPARE HOLDER VALUE TYPE WITH NULL");
 
-        return type.isAssignableFrom(type());
+        return value != null && type.isAssignableFrom(type());
     }
 
-    public static Holder of(Object value) {
-        return new Holder(value);
+    @Override
+    public int hashCode() {
+        return hash(value, inner);
     }
 
     @Override
     public String toString() {
-        return format("HOLDER: {value=%s, type=%s}", value, type().getName());
+        return format("HOLDER: {value=%s, type=%s, inner=%s}", value, value != null ? type().getName() : "?", inner());
     }
 }

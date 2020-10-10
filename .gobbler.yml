@@ -3,6 +3,15 @@ version: '1.0.0'
 build:
   name: Sobaka
 
+#extends: ".gobbler/dev-setup.yml"
+#
+#config:
+#  command_prefix: "@"
+#
+#env_files:
+#  - ".env"
+#  - ".env.dev"
+
 properties:
   JAVA_HOME_DIR: "C:\\Program Files\\${version}\\Java"
   JAVA_COM: "${PPTY.JAVA_HOME_DIR}/bin/java -jar"
