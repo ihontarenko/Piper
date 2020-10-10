@@ -1,6 +1,6 @@
 package io.gobbler.commander.io.loader;
 
-import io.gobbler.commander.Loader;
+import io.gobbler.commander.io.Loader;
 
 import java.io.File;
 import java.io.FileInputStream;

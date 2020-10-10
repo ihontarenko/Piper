@@ -1,5 +1,7 @@
 package io.gobbler.commander.parser;
 
+import io.gobbler.commander.common.Holder;
+
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -13,8 +15,8 @@ public class RootParser extends Parser {
     }
 
     @Override
-    public void handle(ObjectNode node, ParserContext context) {
-        super.handle(node, context);
+    public void handle(ObjectNode node, Holder value) {
+        super.handle(node, value);
     }
 
 }

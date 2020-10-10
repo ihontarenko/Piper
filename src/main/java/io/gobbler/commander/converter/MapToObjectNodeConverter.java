@@ -1,7 +1,7 @@
 package io.gobbler.commander.converter;
 
 import io.gobbler.commander.parser.ObjectNode;
-import io.gobbler.commander.Converter;
+import io.gobbler.commander.common.Converter;
 
 import java.util.HashMap;
 import java.util.Map;

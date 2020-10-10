@@ -1,4 +1,4 @@
-package io.gobbler.commander.io.dumper;
+package io.gobbler.commander.io;
 
 public interface Dumper<F, T> {
 

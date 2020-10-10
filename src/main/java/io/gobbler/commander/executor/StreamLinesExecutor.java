@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 public class StreamLinesExecutor implements Runnable {
 
-    private final InputStream stream;
+    private final InputStream      stream;
     private final Consumer<String> consumer;
 
     public StreamLinesExecutor(InputStream stream, Consumer<String> consumer) {
@@ -18,7 +18,7 @@ public class StreamLinesExecutor implements Runnable {
     @Override
     public void run() {
         new BufferedReader(new InputStreamReader(stream)).lines()
-                .forEach(consumer);
+                .forEach(line -> consumer.accept("->\t" + line));
     }
 
 }

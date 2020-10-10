@@ -7,6 +7,7 @@ public enum Keywords {
     BUILD("build", "buildInfo"),
     ENVIRONMENT("environment", "env", "properties"),
     BINS("bin", "programs"),
+    TARGET("target"),
     COMMANDS("commands", "tasks"),
     // commands keywords
     SCRIPTS("scripts"),

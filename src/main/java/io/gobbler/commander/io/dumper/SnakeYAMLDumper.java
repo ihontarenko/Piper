@@ -1,5 +1,6 @@
 package io.gobbler.commander.io.dumper;
 
+import io.gobbler.commander.io.Dumper;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 

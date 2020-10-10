@@ -1,4 +1,4 @@
-package io.gobbler.commander.io.parser;
+package io.gobbler.commander.io;
 
 public interface Parser<S, R> {
 

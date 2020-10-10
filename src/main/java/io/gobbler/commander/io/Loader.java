@@ -1,4 +1,4 @@
-package io.gobbler.commander;
+package io.gobbler.commander.io;
 
 public interface Loader<I, O> {
 

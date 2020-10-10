@@ -1,13 +1,19 @@
 package io.gobbler.commander.bin;
 
+import io.gobbler.commander.Properties;
+import io.gobbler.commander.ansi.AnsiColors;
+import io.gobbler.commander.Command;
+import io.gobbler.commander.common.Holder;
 import io.gobbler.commander.converter.KeyAbbreviationConverter;
 import io.gobbler.commander.converter.MapToObjectNodeConverter;
-import io.gobbler.commander.converter.NestedMapToFlatMapConverter;
-import io.gobbler.commander.executor.StreamLinesExecutor;
+import io.gobbler.commander.converter.FlattenMapConverter;
 import io.gobbler.commander.io.dumper.SnakeYAMLDumper;
 import io.gobbler.commander.io.loader.YamlLoader;
 import io.gobbler.commander.io.parser.SnakeYAMLParser;
 import io.gobbler.commander.parser.*;
+import io.gobbler.commander.converter.text.AnsiTextConverter;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.io.IOException;
@@ -15,13 +21,59 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import static io.gobbler.commander.Constants.DEFAULT_CONFIGURATION_FILE_NAME;
+import static java.lang.String.format;
 
 public class JavaCommandFlowCli {
 
-    public static void main(String... arguments) throws IOException, InterruptedException {
+
+    public static void main(String... arguments) throws IOException, InterruptedException, ParseException {
+
+        AnsiTextConverter converter = new AnsiTextConverter();
+
+        System.out.println();
+        System.out.println();
+
+        for (AnsiColors value : AnsiColors.values()) {
+            System.out.println(converter.convert(format("${ansi:%s}%s", value.getName(), value.getName())));
+        }
+
+        System.out.println();
+        System.out.println();
+
+
+        Options options = new Options();
+
+        options.addOption(new Option("f", "config-file", true, "PASS TARGET CONFIG FILE '.gobbler.yml'"));
+
+        HelpFormatter formatter = new HelpFormatter();
+
+        formatter.setArgName("ARGUMENT");
+        formatter.setSyntaxPrefix(converter.convert("${ansi:BLACK_BG_BRIGHT}COMMAND USAGE:${ansi:RESET} "));
+        formatter.setWidth(128);
+        formatter.setLongOptPrefix(" --");
+        formatter.setLongOptSeparator("=");
+        formatter.setOptPrefix(" -");
+//
+        for (Command value : Command.values()) {
+            formatter.printHelp(converter.convert(format("${ansi:BLUE_UNDERLINED}%s", value.getName())), "-".repeat(32), value.getOptions(), "-".repeat(32));
+            System.out.println();
+        }
+
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine       line   = parser.parse(options, new String[]{"-f", "./.gobbler.yaml"});
+
+        System.out.println(
+                line.getOptionValue("config-file")
+        );
+
+        System.out.println(
+                line.getOptionValue('f')
+        );
+
+//        System.exit(1);
 
         SnakeYAMLDumper dumper = new SnakeYAMLDumper();
 
@@ -47,11 +99,11 @@ public class JavaCommandFlowCli {
             }});
         }};
 
-        new NestedMapToFlatMapConverter("env", ".").convert(System.getenv());
+        new FlattenMapConverter("env", ".").convert(System.getenv());
 
         String template = "test vars: JAVA_HOME: ${env:JAVA_HOME} | gobbler yaml version = ${version} | get script [[ ${PPTY/BASH_CMD_WINDOWS} ]] finish";
 
-        String result = StringSubstitutor.replace(template, new NestedMapToFlatMapConverter(null, "/").convert(
+        String result = StringSubstitutor.replace(template, new FlattenMapConverter(null, "/").convert(
                 new KeyAbbreviationConverter(new HashMap<>() {{
                     put("programs", "BIN");
                     put("properties", "PPTY");
@@ -59,7 +111,7 @@ public class JavaCommandFlowCli {
                 }}).convert(values)
         ));
 
-        result = StringSubstitutor.replace(result, new NestedMapToFlatMapConverter("env:", ".").convert(System.getenv()));
+        result = StringSubstitutor.replace(result, new FlattenMapConverter("env:", ".").convert(System.getenv()));
 
 //        new NestedMapToFlatMapConverter(null, ".").convert(
 //                new KeyAbbreviationConverter(new HashMap<>(){{
@@ -85,14 +137,15 @@ public class JavaCommandFlowCli {
 
         root.addChild(new VersionParser());
         root.addChild(new EnvParser());
+        root.addChild(new TargetParser());
         root.addChild(new BinsParser());
-        root.addChild(new CommandListParser()
+        root.addChild(new CommandTasksParser()
                 .addChild(new CommandScriptsParser())
                 .addChild(new CommandDescriptionParser())
                 .addChild(new CommandEnvParser()));
         root.addChild(new BuildInfoParser());
 
-        root.handle(node, new ParserContext());
+        root.handle(node, Holder.of(new Properties<>()));
 
 //        context.setRawConfiguration(values);
 //
@@ -193,21 +246,25 @@ public class JavaCommandFlowCli {
 //
 //        boolean isWindows = System.getProperty("os.name")
 //                .toLowerCase().startsWith("windows");
+////
+//        ProcessBuilder builder = new ProcessBuilder();
 //
-        ProcessBuilder builder = new ProcessBuilder();
+////        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
+//        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la | grep sh && echo test wqe");
+//        builder.command(parseCommand("C:\\\\Program Files\\\\Git\\\\git-cmd.exe ls -la | grep 'sh' && echo %PATH%"));
+//
+////        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe ls -la | grep sh && echo test wqe");
+////
+////        builder.inheritIO();
+//
+////        for (String s : parseCommand("C:\\\\Program Files\\\\Git\\\\git-cmd.exe ls -la | grep 'sh' && echo $PATH")) {
+////            System.out.println(s);
+////        }
+//
+//        System.out.println("before");
+//        Process process = builder.start();
+//        System.out.println("after");
 
-//        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
-        builder.command("C:\\\\Program Files\\\\Git\\\\git-cmd.exe", "ls -la");
-
-        System.out.println("before");
-        Process process = builder.start();
-        System.out.println("after");
-
-        Executors.newFixedThreadPool(5).submit(
-                new StreamLinesExecutor(process.getInputStream(), System.out::println)
-        );
-
-        System.exit(process.waitFor());
     }
 
 }

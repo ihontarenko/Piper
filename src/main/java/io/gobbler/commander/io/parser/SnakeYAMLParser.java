@@ -1,5 +1,6 @@
 package io.gobbler.commander.io.parser;
 
+import io.gobbler.commander.io.Parser;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
