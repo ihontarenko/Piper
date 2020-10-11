@@ -11,9 +11,9 @@ public enum Command {
         public Options getOptions() {
             Options options = new Options();
 
-            options.addOption(new Option("f", "file", true, ANSI.convert("${ansi:GREEN}specify an alternate gobbler file")));
-            options.addOption(new Option("v", "verbose", false, ANSI.convert("${ansi:GREEN}verbose mode")));
-            options.addOption(new Option("q", "quite", false, ANSI.convert("${ansi:GREEN}quite mode")));
+            options.addOption(new Option("f", "file", true, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}specify an alternate gobbler file")));
+            options.addOption(new Option("v", "verbose", false, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}verbose mode")));
+            options.addOption(new Option("q", "quite", false, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}quite mode")));
 
             return options;
         }
@@ -24,9 +24,9 @@ public enum Command {
         public Options getOptions() {
             Options options = new Options();
 
-            options.addOption(new Option("a", "author", false, ANSI.convert("${ansi:GREEN}display author name")));
-            options.addOption(new Option("v", "version", false, ANSI.convert("${ansi:GREEN}display version name")));
-            options.addOption(new Option("f", "full", false, ANSI.convert("${ansi:GREEN}display full information")));
+            options.addOption(new Option("a", "author", false, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}display author name")));
+            options.addOption(new Option("v", "version", false, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}display version name")));
+            options.addOption(new Option("f", "full", false, ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}display full information")));
 
             return options;
         }

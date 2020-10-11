@@ -58,14 +58,14 @@ public enum AnsiColors {
     CYAN_BOLD_BRIGHT("\u001B[1;96m"),
     WHITE_BOLD_BRIGHT("\u001B[1;97m"),
     // HIGH INTENSITY BGS
-    BLACK_BG_BRIGHT("\u001B[0;100m"),
-    RED_BG_BRIGHT("\u001B[0;101m"),
-    GREEN_BG_BRIGHT("\u001B[0;102m"),
-    YELLOW_BG_BRIGHT("\u001B[0;103m"),
-    BLUE_BG_BRIGHT("\u001B[0;104m"),
-    PURPLE_BG_BRIGHT("\u001B[0;105m"),
-    CYAN_BG_BRIGHT("\u001B[0;106m"),
-    WHITE_BG_BRIGHT("\u001B[0;107m");
+    BLACK_BG_BRIGHT("\u001B[100m"),
+    RED_BG_BRIGHT("\u001B[101m"),
+    GREEN_BG_BRIGHT("\u001B[102m"),
+    YELLOW_BG_BRIGHT("\u001B[103m"),
+    BLUE_BG_BRIGHT("\u001B[104m"),
+    PURPLE_BG_BRIGHT("\u001B[105m"),
+    CYAN_BG_BRIGHT("\u001B[106m"),
+    WHITE_BG_BRIGHT("\u001B[107m");
 
     private final String value;
 

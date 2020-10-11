@@ -51,14 +51,16 @@ public class JavaCommandFlowCli {
         HelpFormatter formatter = new HelpFormatter();
 
         formatter.setArgName("ARGUMENT");
-        formatter.setSyntaxPrefix(converter.convert("${ansi:BLACK_BG_BRIGHT}COMMAND USAGE:${ansi:RESET} "));
+        formatter.setSyntaxPrefix(converter.convert("${ansi:BLUE_BOLD_BRIGHT}COMMAND USAGE:${ansi:RESET} "));
         formatter.setWidth(128);
         formatter.setLongOptPrefix(" --");
         formatter.setLongOptSeparator("=");
         formatter.setOptPrefix(" -");
+
+        String separator = converter.convert(format("${ansi:RED_BOLD_BRIGHT}%s", "-".repeat(32)));
 //
         for (Command value : Command.values()) {
-            formatter.printHelp(converter.convert(format("${ansi:BLUE_UNDERLINED}%s", value.getName())), "-".repeat(32), value.getOptions(), "-".repeat(32));
+            formatter.printHelp(converter.convert(format("${ansi:YELLOW_BOLD_BRIGHT}%s", value.getName())), separator, value.getOptions(), separator);
             System.out.println();
         }
 

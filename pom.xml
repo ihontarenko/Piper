@@ -50,6 +50,9 @@
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
+
+        <maven.compile.source>${java.version}</maven.compile.source>
+        <maven.compile.target>${java.version}</maven.compile.target>
     </properties>
 
     <dependencies>
@@ -220,11 +223,15 @@
                                 <transformers>
                                     <transformer implementation=
                                                          "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                        <mainClass>${start-class}</mainClass>
+<!--                                        <mainClass>${start-class}</mainClass>-->
                                         <manifestEntries>
+                                            <Main-Class>${start-class}</Main-Class>
                                             <Build-Number>Build-${maven.build.timestamp}</Build-Number>
+                                            <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                            <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
                                         </manifestEntries>
                                     </transformer>
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 </transformers>
                             </configuration>
                         </execution>

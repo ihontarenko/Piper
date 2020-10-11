@@ -10,8 +10,9 @@ import static java.util.Arrays.stream;
 public class AnsiColorsProperties extends Properties<String> {
 
     public AnsiColorsProperties() {
-        super(new HashMap<>() {{
-            stream(AnsiColors.values()).forEach(value -> put(value.getName(), value.getValue()));
+        super(new HashMap<String, String>() {{
+            stream(AnsiColors.values()).forEach(value
+                    -> put(value.getName(), value.getValue()));
         }});
     }
 }
