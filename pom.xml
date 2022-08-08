@@ -3,17 +3,17 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.gobbler</groupId>
-    <artifactId>commander</artifactId>
+    <groupId>pro.javadev</groupId>
+    <artifactId>piper</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>gobbler.io - Commander</name>
+    <name>Piper</name>
 
     <developers>
         <developer>
             <email>ihontarenko@gmail.com</email>
             <name>Ivan Hontarenko</name>
-            <organization>Home Inc.</organization>
-            <url>https://gobbler.io/commander</url>
+            <organization>Borisovich Inc. [http://borisovich.net/]</organization>
+            <url>https://javadev.pro/piper</url>
             <roles>
                 <role>owner</role>
             </roles>
@@ -23,9 +23,9 @@
 
     <properties>
         <!-- Project -->
-        <buildName>gobbler-commander</buildName>
-        <start-class>io.gobbler.commander.bin.JavaCommandFlowCli</start-class>
-        <jar-dependencies-directory>jars-library</jar-dependencies-directory>
+        <buildName>build</buildName>
+        <start-class>pro.javadev.piper.bin.Piper</start-class>
+        <jar-dependencies-directory>jars</jar-dependencies-directory>
         <maven.test.skip>true</maven.test.skip>
 
         <!-- Project -->
@@ -41,14 +41,14 @@
         <slf4j-api.version>1.7.30</slf4j-api.version>
         <snakeyaml.version>1.27</snakeyaml.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <commons-cli.version>1.4</commons-cli.version>
+        <commons-cli.version>1.5.0</commons-cli.version>
         <commons-text.version>1.9</commons-text.version>
 
         <!-- Maven Plugins -->
         <maven-compiler.version>3.8.1</maven-compiler.version>
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+        <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
 
         <maven.compile.source>${java.version}</maven.compile.source>
@@ -56,6 +56,7 @@
     </properties>
 
     <dependencies>
+
         <!-- Apache Commons -->
         <dependency>
             <groupId>commons-beanutils</groupId>
@@ -101,17 +102,6 @@
 
     <profiles>
         <profile>
-            <id>maven-assembly</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>maven-shade</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -155,11 +145,14 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <addClasspath>true</addClasspath>
+                                <addClasspath>false</addClasspath>
                                 <classpathPrefix>${jar-dependencies-directory}/</classpathPrefix>
                                 <mainClass>${start-class}</mainClass>
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
+                            <manifestEntries>
+                                <X-Created-By>Borisovich</X-Created-By>
+                            </manifestEntries>
                         </archive>
                     </configuration>
                 </plugin>
@@ -178,6 +171,9 @@
                                 <outputDirectory>
                                     ${project.build.directory}/classes/${jar-dependencies-directory}
                                 </outputDirectory>
+                                <overWriteReleases>false</overWriteReleases>
+                                <overWriteSnapshots>false</overWriteSnapshots>
+                                <overWriteIfNewer>true</overWriteIfNewer>
                             </configuration>
                         </execution>
                     </executions>
@@ -218,12 +214,10 @@
                                 <goal>shade</goal>
                             </goals>
                             <configuration>
-                                <finalName>build</finalName>
-                                <shadedArtifactAttached>true</shadedArtifactAttached>
+                                <finalName>${project.build.finalName}</finalName>
                                 <transformers>
                                     <transformer implementation=
                                                          "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-<!--                                        <mainClass>${start-class}</mainClass>-->
                                         <manifestEntries>
                                             <Main-Class>${start-class}</Main-Class>
                                             <Build-Number>Build-${maven.build.timestamp}</Build-Number>

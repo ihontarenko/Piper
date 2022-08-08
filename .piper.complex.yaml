@@ -1,0 +1,93 @@
+version: '1.0.0'
+
+build:
+  name: Lalka
+
+#extends: ".gobbler/dev-setup.yml"
+#
+#config:
+#  command_prefix: "@"
+#
+#env_files:
+#  - ".env"
+#  - ".env.dev"
+#
+# $ piper run cd-status start-mariadb
+#
+
+properties:
+  JAVA_HOME_DIR: "C:\\Program Files\\${version}\\Java"
+  JAVA_COM: "${PPTY.JAVA_HOME_DIR}/bin/java -jar"
+  WIN_PROGRAM_FILES: "C:\\Program Files"
+  BASH_CMD_UNIX: "bash -c"
+  BASH_CMD_WINDOWS: "${BIN.bash} -c"
+
+# SYSTEM - Current Local Machine
+# VM - Installed Vagrant On Your Local Machine
+target: SYSTEM
+
+programs:
+  piper: "java -jar ./bin/gobbler.jar go"
+  docker-bin: "docker exec -it"
+  bash: "${PPTY.WIN_PROGRAM_FILES}\\Git\\git-cmd.exe"
+
+commands:
+
+  cd-status:
+    scripts:
+      - 'echo "[CURRENT DIRECTORY STATUS]"'
+      - "ls -la"
+      - "du -h ."
+
+  health-check:
+    description: "Check Health Of All Applications"
+    properties:
+      JAVA_RUN: "${env.JAVA_HOME}/bin/java ${ARGUMENTS[2]} -jar ${ARGUMENTS[0]}"
+    scripts:
+      - "${bash} ./healthCheck.sh"
+
+  start-mariadb:
+    scripts:
+      - "cd-status"
+      - "docker-compose up -d app-mariadb"
+      - "${gobbler.programs.bash} ./healthCheck.sh"
+
+  start-couchbase:
+
+    description: "Check Health Of All Applications"
+      properties:
+        JAVA_RUN: "${env.JAVA_HOME}/bin/java ${ARGUMENTS[2]} -jar ${ARGUMENTS[0]}"
+
+    predicates:
+      - type: "LINE_COUNT"
+        arguments:
+          min: 0
+          max: 100
+      - type: "EXPECTED_STRING"
+        arguments:
+          text:
+            - "finish"
+            - "looped"
+    scripts:
+      - "@cd-status"
+      - "docker-compose up -d app-couchbase-server"
+      - "${gobbler.programs.bash} app-couchbase-server top -s 10"
+
+  start-databases:
+    scripts:
+      - "start-mariadb"
+      - "start-couchbase"
+
+  start-consul:
+    scripts:
+      - "docker-compose up -d app-consul"
+
+  start-main:
+    scripts:
+      - "start-consul"
+      - "start-databases"
+
+  build-uber-jar:
+    scripts:
+      - "start-consul"
+      - "start-databases"
