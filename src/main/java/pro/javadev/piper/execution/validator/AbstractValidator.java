@@ -10,7 +10,7 @@ import static pro.javadev.piper.execution.ExecutionContext.State.READY_TO_DIE;
 
 public abstract class AbstractValidator implements Validator {
 
-    protected final static ColoredPrinterConsumer PRINTER_CONSUMER
+    protected final static ColoredPrinterConsumer PRINTER
             = new ColoredPrinterConsumer(AnsiColors.RED_BOLD_BRIGHT, System.out::println) {{
                 setBackground(AnsiColors.WHITE_BOLD_BRIGHT);
     }};
@@ -18,7 +18,7 @@ public abstract class AbstractValidator implements Validator {
     protected void stopProcess(ExecutionContext context) {
         context.getProcess().destroyForcibly();
         context.toState(READY_TO_DIE);
-        PRINTER_CONSUMER.accept(format("PRECESS STOPPED [%s]", getClass().getCanonicalName()));
+        PRINTER.accept(format("PRECESS STOPPED [%s]", getClass().getCanonicalName()));
     }
 
 }
