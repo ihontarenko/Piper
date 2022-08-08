@@ -3,7 +3,7 @@ package pro.javadev.piper.configurator;
 import pro.javadev.piper.common.Holder;
 import pro.javadev.piper.configurator.script.StepsConfigurator;
 import pro.javadev.piper.configurator.script.ValidatorsConfigurator;
-import pro.javadev.piper.script.Script;
+import pro.javadev.piper.execution.script.Script;
 
 import java.util.EnumMap;
 import java.util.List;

@@ -3,8 +3,8 @@ package pro.javadev.piper.configurator.script;
 import pro.javadev.piper.common.Holder;
 import pro.javadev.piper.configurator.BaseConfigurator;
 import pro.javadev.piper.configurator.Keyword;
-import pro.javadev.piper.script.CommandLine;
-import pro.javadev.piper.script.DefaultCommandLine;
+import pro.javadev.piper.execution.script.CommandLine;
+import pro.javadev.piper.execution.script.DefaultCommandLine;
 
 import java.util.List;
 import java.util.function.Predicate;

@@ -1,4 +1,4 @@
-package pro.javadev.piper.script;
+package pro.javadev.piper.execution.script;
 
 import pro.javadev.piper.ApplicationContext;
 

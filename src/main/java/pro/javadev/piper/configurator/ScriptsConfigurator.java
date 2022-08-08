@@ -2,8 +2,8 @@ package pro.javadev.piper.configurator;
 
 import pro.javadev.piper.common.Holder;
 import pro.javadev.piper.common.Registry;
-import pro.javadev.piper.script.DefaultScript;
-import pro.javadev.piper.script.Script;
+import pro.javadev.piper.execution.script.DefaultScript;
+import pro.javadev.piper.execution.script.Script;
 
 import java.util.Map;
 

@@ -1,67 +1,90 @@
 ```text
-               __     __     __
-.-----..-----.|  |--.|  |--.|  |.-----..----.
-|  _  ||  _  ||  _  ||  _  ||  ||  -__||   _|
-|___  ||_____||_____||_____||__||_____||__|
-|_____|
 
+ +-----------------------------------------+
+ |   _____  _____  _____  _______  ______  |
+ | |_____]   |   |_____] |______ |_____/   |
+ | |       __|__ |       |______ |    \_   |
+ |                                         |
+ +-----------------------------------------+
+   -= PIPER - RUN DESCRIBED COMMANDS =-
+        -= IVAN HONTARENKO (2022) =-
 ```
 
-## Java Command Flow Runner Tool
+## Piper Runner
 
+### Build bin file
+```bash
+./piper.sh -b
+```
 
-### .gobbler.yml
+### Execute Script
+```bash
+./piper.sh run script-name
+```
 
+### Specify file
+```bash
+./piper.sh run script-name -f ./.piper.prd.yaml
+```
+
+### About
+```bash
+./piper.sh about
+```
+
+### Show Environment Variables
+```bash
+./piper.sh env
+```
+
+### .piper.yml
 ```yaml
-version: '1.0'
+version: Beta0
 
-gobbler:
+#extends:
+#  - ".piper/dev-setup.yml"
+#
+# $ piper run cd-status start-mariadb
+#
+# ${ppty:hello} - properties
+# ${cfg:sub_script_prefix} - configs
+# ${env:JAVA_HOME} - envs
 
-  targets:
-    docker-bin: "docker exec -it"
-    gobbler: "java -jar ./bin/gobbler.jar do"
-    bin: "C:\\Program Files\\Git\\git-cmd.exe"
-    bash: "C:\\Program Files\\Git\\git-bash.exe"
+config:
+  os: linux
+  sub_script_prefix: "@"
 
-  commands:
-    
-    cd-status:
-      target: system
-      strategy: consistent
-      commands:
-        - 'echo "[CURRENT DIRECTORY STATUS]"'
-        - "ls -la"
-        - "du -h ."
+properties:
+  hello: "Hello World!!!"
+  youtube: "youtube.com"
+  JAVA_BIN: "${env:JAVA_HOME}/bin/java"
 
-    start-mariadb:
-      strategy: parallel
-      commands:
-        - "cd-status"
-        - "docker-compose up -d dcp-mariadb"
-
-
-    start-couchbase:
-      strategy: consistent
-      commands:
-        - "cd-status"
-        - "docker-compose up -d dcp-couchbase-server"
-
-    start-databases:
-      strategy:
-        name: parallel
-        counter: 5
-      commands:
-        - "start-mariadb"
-        - "start-couchbase"
-
-    start-consul:
-      strategy: consistent
-      commands:
-        - "docker-compose up -d dcp-consul"
-
-    start-main:
-      strategy: consistent
-      commands:
-        - "start-consul"
-        - "start-databases"
+scripts:
+  all:
+    description: "Run All"
+    steps:
+      - "@java-version"
+      - "@ping"
+      - "@docker-stats"
+  java-version:
+    description: "Java Version"
+    steps:
+      - "${ppty.JAVA_BIN} -version"
+  docker-stats:
+    description: "Docker Stats (for 10 lines)"
+    steps:
+      - "docker stats"
+    validators:
+      - type: "LINE_COUNT"
+        parameters:
+          threshold: 10
+  ping:
+    description: "PING Domain!"
+    validators:
+      - type: "WAIT_FOR"
+        parameters:
+          unit: SECONDS
+          time: 10
+    steps:
+      - "ping -n 10 ${ARGS[2]}"
 ```

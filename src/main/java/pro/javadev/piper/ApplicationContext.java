@@ -1,7 +1,7 @@
 package pro.javadev.piper;
 
 import pro.javadev.piper.common.Registry;
-import pro.javadev.piper.script.Script;
+import pro.javadev.piper.execution.script.Script;
 
 import java.util.ArrayList;
 import java.util.HashMap;

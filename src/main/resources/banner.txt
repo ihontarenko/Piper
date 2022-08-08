@@ -1,3 +1,10 @@
-  _____  _____  _____  _______  ______
- |_____]   |   |_____] |______ |_____/
- |       __|__ |       |______ |    \_
+${ansi:GREEN_BOLD_BRIGHT}
+${ansi:GREEN_BOLD_BRIGHT} +-----------------------------------------+
+${ansi:GREEN_BOLD_BRIGHT} |   _____  _____  _____  _______  ______  |
+${ansi:GREEN_BOLD_BRIGHT} | |_____]   |   |_____] |______ |_____/   |
+${ansi:GREEN_BOLD_BRIGHT} | |       __|__ |       |______ |    \_   |
+${ansi:GREEN_BOLD_BRIGHT} |                                         |
+${ansi:GREEN_BOLD_BRIGHT} +-----------------------------------------+
+${ansi:PURPLE_BOLD_BRIGHT}   -= PIPER - RUN DESCRIBED COMMANDS =-
+${ansi:CYAN_BOLD_BRIGHT}        -= IVAN HONTARENKO (2022) =-
+${ansi:GREEN_BOLD_BRIGHT}

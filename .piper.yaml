@@ -20,79 +20,30 @@ properties:
   JAVA_BIN: "${env:JAVA_HOME}/bin/java"
 
 scripts:
-
+  all:
+    description: "Run All"
+    steps:
+      - "@java-version"
+      - "@ping"
+      - "@docker-stats"
   java-version:
     description: "Java Version"
     steps:
-      - "@ping"
       - "${ppty.JAVA_BIN} -version"
-      - "dir ${env:JAVA_HOME}"
-
   docker-stats:
-    description: "Just Hello & PING"
+    description: "Docker Stats (for 10 lines)"
     steps:
-      - "@java-version"
       - "docker stats"
     validators:
       - type: "LINE_COUNT"
         parameters:
-          threshold: 5
-
-  test-echo:
-    description: "Just Hello & PING"
-
-    steps:
-      - "@java-version"
-      - "@docker-stats"
-      - "tasklist"
-
-    validators:
-      - type: "LINE_COUNT"
-        parameters:
-          threshold: 5
-      - type: "EXPECTED_STRING"
-        parameters:
-          text:
-            - "WUDFHost"
-      - type: "WAIT_FOR"
-        parameters:
-          unit: MINUTES
-          time: 1
-
-  test-run:
-    description: "Test Run"
-
-    properties:
-      JAVA_BIN: "${env:JAVA_HOME}/bin/java"
-
-    validators:
-      - type: "LINE_COUNT"
-        parameters:
-          threshold: 2500
-      - type: "EXPECTED_STRING"
-        parameters:
-          text:
-            - "stop-word"
-      - type: "WAIT_FOR"
-        parameters:
-          unit: SECONDS
-          time: 10
-
-    steps:
-      - "dir ${env:JAVA_HOME}"
-      - "ipconfig /release"
-      - "${JAVA_BIN} -version"
-      - "@test-echo"
-      - "ping -n 5 ${ppty.youtube}"
-
+          threshold: 10
   ping:
     description: "PING Domain!"
-
     validators:
       - type: "WAIT_FOR"
         parameters:
           unit: SECONDS
           time: 10
     steps:
-      - "echo ${ARGS[0]} ${ARGS[1]} ${ARGS[2]}"
       - "ping -n 10 ${ARGS[2]}"
