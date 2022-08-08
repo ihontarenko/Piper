@@ -12,7 +12,7 @@ public class ColoredPrinterConsumer implements Consumer<String> {
     private static final AnsiTextConverter CONVERTER = new AnsiTextConverter();
     private final        Consumer<String>  consumer;
     private              AnsiColors        color;
-    private              AnsiColors        background = AnsiColors.BLACK_BG_BRIGHT;
+    private              AnsiColors        background = AnsiColors.BLACK_BG;
 
     public ColoredPrinterConsumer(AnsiColors color, Consumer<String> consumer) {
         this.color = color;
