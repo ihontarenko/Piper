@@ -46,4 +46,4 @@ scripts:
           unit: SECONDS
           time: 10
     steps:
-      - "ping -n 10 ${ARGS[2]}"
+      - "ping ${ARGS[2]}"
