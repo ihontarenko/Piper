@@ -1,19 +1,15 @@
 package pro.javadev.piper.execution.validator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pro.javadev.piper.execution.Entry;
 import pro.javadev.piper.execution.ExecutionContext;
-import pro.javadev.piper.execution.Validator;
 
 import java.util.Map;
 
 import static pro.javadev.piper.execution.ExecutionContext.State.READY_TO_DIE;
 
-public class LineCounterValidator implements Validator {
+public class LineCounterValidator extends AbstractValidator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LineCounterValidator.class);
-    private              int    threshold;
+    private int threshold;
 
     public int getThreshold() {
         return threshold;
@@ -27,7 +23,7 @@ public class LineCounterValidator implements Validator {
     public void validate(Entry entry, ExecutionContext context) {
         if (threshold < entry.ordinal()) {
             context.toState(READY_TO_DIE);
-            LOGGER.info("VALIDATOR FAILED");
+            stopProcess(context);
         }
     }
 

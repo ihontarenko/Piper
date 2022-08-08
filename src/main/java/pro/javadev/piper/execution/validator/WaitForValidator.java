@@ -1,23 +1,17 @@
 package pro.javadev.piper.execution.validator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pro.javadev.piper.common.Countdown;
 import pro.javadev.piper.execution.Entry;
 import pro.javadev.piper.execution.ExecutionContext;
-import pro.javadev.piper.execution.Validator;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static pro.javadev.piper.execution.ExecutionContext.State.READY_TO_DIE;
+public class WaitForValidator extends AbstractValidator {
 
-public class WaitForValidator implements Validator {
-
-    private static final Logger    LOGGER = LoggerFactory.getLogger(WaitForValidator.class);
-    private              Countdown countdown;
-    private              TimeUnit  unit;
-    private              long      duration;
+    private Countdown countdown;
+    private TimeUnit  unit;
+    private long      duration;
 
     @Override
     public void configure(Map<String, Object> parameters) {
@@ -29,16 +23,12 @@ public class WaitForValidator implements Validator {
     public void validate(Entry entry, ExecutionContext context) {
         ensureCountdown();
 
-        Process process = context.getProcess();
-        boolean spent   = countdown.spent(duration, unit);
+        boolean spent = countdown.spent(duration, unit);
 
         if (spent) {
-            process.destroyForcibly();
-            context.toState(READY_TO_DIE);
+            stopProcess(context);
             countdown = null;
-            LOGGER.info("VALIDATOR FAILED");
         }
-
     }
 
     private void ensureCountdown() {
