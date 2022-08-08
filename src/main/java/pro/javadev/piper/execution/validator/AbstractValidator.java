@@ -11,8 +11,8 @@ import static pro.javadev.piper.execution.ExecutionContext.State.READY_TO_DIE;
 public abstract class AbstractValidator implements Validator {
 
     protected final static ColoredPrinterConsumer PRINTER_CONSUMER
-            = new ColoredPrinterConsumer(AnsiColors.WHITE_BOLD_BRIGHT, System.out::println) {{
-                setBackground(AnsiColors.RED_BG_BRIGHT);
+            = new ColoredPrinterConsumer(AnsiColors.RED_BOLD_BRIGHT, System.out::println) {{
+                setBackground(AnsiColors.WHITE_BOLD_BRIGHT);
     }};
 
     protected void stopProcess(ExecutionContext context) {

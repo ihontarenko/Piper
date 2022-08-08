@@ -144,7 +144,7 @@
                     <transformer>
                       <manifestEntries>
                         <Main-Class>pro.javadev.piper.bin.Piper</Main-Class>
-                        <Build-Number>Build-2022-08-08T16:27:52Z</Build-Number>
+                        <Build-Number>Build-2022-08-08T16:32:00Z</Build-Number>
                         <X-Compile-Source-JDK>11</X-Compile-Source-JDK>
                         <X-Compile-Target-JDK>11</X-Compile-Target-JDK>
                       </manifestEntries>
