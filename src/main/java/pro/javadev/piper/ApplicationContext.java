@@ -1,5 +1,8 @@
 package pro.javadev.piper;
 
+import org.apache.commons.cli.CommandLine;
+import pro.javadev.piper.command.CommandName;
+import pro.javadev.piper.common.Holder;
 import pro.javadev.piper.common.Registry;
 import pro.javadev.piper.execution.script.Script;
 
@@ -22,6 +25,12 @@ public interface ApplicationContext {
 
     Map<String, Object> getValues();
 
+    CommandName getCurrentCommandName();
+
+    CommandLine getParsedLine();
+
+    Map<String, Holder> getProperties();
+
     final class Context implements ApplicationContext {
 
         final Registry<String, Script> scripts       = new Registry<>();
@@ -29,6 +38,25 @@ public interface ApplicationContext {
         final Version                  version       = new Version();
         final List<String>             arguments     = new ArrayList<>();
         final Map<String, Object>      values        = new HashMap<>();
+        final Map<String, Holder>      properties    = new HashMap<>() {{
+            put(Constants.CURRENT_COMMAND_NAME, Holder.of(null));
+            put(Constants.PARSED_LINE, Holder.of(null));
+        }};
+
+        @Override
+        public CommandName getCurrentCommandName() {
+            return getProperties().get(Constants.CURRENT_COMMAND_NAME).get();
+        }
+
+        @Override
+        public CommandLine getParsedLine() {
+            return getProperties().get(Constants.PARSED_LINE).get();
+        }
+
+        @Override
+        public Map<String, Holder> getProperties() {
+            return properties;
+        }
 
         @Override
         public List<String> getArguments() {

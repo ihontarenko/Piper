@@ -35,12 +35,10 @@ public class ScriptExecutor implements Executor {
             throw new RuntimeException(format("UNABLE TO RUN UNDEFINED SCRIPT NAME %s", scriptName));
         }
 
-        printer.setColor(AnsiColors.BLACK_BOLD_BRIGHT);
-        printer.setBackground(AnsiColors.YELLOW_BOLD_BRIGHT);
-        printer.accept("");
+        printer.setColor(AnsiColors.YELLOW_BOLD_BRIGHT);
+        printer.setBackground(AnsiColors.BLACK_BG);
         printer.accept(format(" START SCRIPT: [ %s ] ",
                 Optional.ofNullable(script.getDescription()).orElseGet(script::getName)));
-        printer.accept("");
 
         for (CommandLine line : script.getLines()) {
             if (line.isSubScript()) {
@@ -48,8 +46,7 @@ public class ScriptExecutor implements Executor {
 
                 printer.setColor(AnsiColors.BLUE_BOLD_BRIGHT);
                 printer.accept(" SUB-SCRIPT: ");
-                printer.accept(format("\t[ %s ]", subScript));
-                printer.accept("");
+                printer.accept(format(" [ %s ] ", subScript));
 
                 process(scripts, subScript);
             } else {
@@ -59,8 +56,7 @@ public class ScriptExecutor implements Executor {
 
                 printer.setColor(AnsiColors.GREEN_BOLD_BRIGHT);
                 printer.accept(" EXECUTE LINE: ");
-                printer.accept(format("\t[ %s ]", converted));
-                printer.accept("");
+                printer.accept(format(" [ %s ] ", converted));
 
                 execution.getValidators().addAll(script.getValidators());
 
