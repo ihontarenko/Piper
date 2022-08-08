@@ -12,7 +12,8 @@ public abstract class AbstractValidator implements Validator {
 
     protected final static ColoredPrinterConsumer PRINTER
             = new ColoredPrinterConsumer(AnsiColors.RED_BOLD_BRIGHT, System.out::println) {{
-                setBackground(AnsiColors.WHITE_BOLD_BRIGHT);
+                setColor(AnsiColors.RED_BOLD);
+                setBackground(AnsiColors.WHITE_BG_BRIGHT);
     }};
 
     protected void stopProcess(ExecutionContext context) {
