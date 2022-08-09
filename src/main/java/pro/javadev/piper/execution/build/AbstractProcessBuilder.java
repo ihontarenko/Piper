@@ -29,7 +29,6 @@ public abstract class AbstractProcessBuilder implements Builder<Process> {
 
         builder.command(commands.toArray(String[]::new));
         builder.redirectErrorStream(true);
-        builder.inheritIO();
 
         System.out.println(
                 String.join(" ", commands)
