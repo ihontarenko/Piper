@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-JAR_BIN=./bin/build.jar
-JAR_SRC=./target/build.jar
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+JAR_BIN=${SCRIPT_DIR}/bin/build.jar
+JAR_SRC=${SCRIPT_DIR}/target/build.jar
 
 maven_build() {
   echo "START BUILD!"

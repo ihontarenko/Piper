@@ -15,7 +15,7 @@ config:
   sub_script_prefix: "@"
 
 properties:
-  hello: "Hello World!!!"
+  hello: "Hello Dude!!!"
   youtube: "youtube.com"
   JAVA_BIN: "${env:JAVA_HOME}/bin/java"
 
