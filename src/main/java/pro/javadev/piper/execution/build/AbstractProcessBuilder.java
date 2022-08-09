@@ -11,10 +11,10 @@ import static java.util.List.of;
 
 public abstract class AbstractProcessBuilder implements Builder<Process> {
 
-    private final List<String> commands;
+    private final List<String> commands = new ArrayList<>();
 
     protected AbstractProcessBuilder(String... commands) {
-        this.commands = new ArrayList<>(of(commands));
+        withCommands(commands);
     }
 
     public AbstractProcessBuilder withCommands(String... commands) {
