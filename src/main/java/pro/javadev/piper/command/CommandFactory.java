@@ -20,6 +20,9 @@ public class CommandFactory {
             case HELP:
                 command = new HelpCommand();
                 break;
+            case INFO:
+                command = new InfoCommand();
+                break;
         }
 
         Objects.requireNonNull(command, "UNABLE TO FIND COMMAND");

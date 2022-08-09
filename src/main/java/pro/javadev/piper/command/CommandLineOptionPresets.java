@@ -12,7 +12,8 @@ import static pro.javadev.piper.command.CommandName.*;
 public class CommandLineOptionPresets {
 
     private final static AnsiTextConverter ANSI           = new AnsiTextConverter();
-    private static final Option            DEFAULT_OPTION = new Option("f", "file", true, "pass target config file '.piper.yaml'");
+    private static final Option            DEFAULT_OPTION = new Option("f", "file", true,
+            ANSI.convert("${ansi:GREEN_BOLD_BRIGHT}pass target config file '.piper.yaml'"));
 
     public static final Map<CommandName, Supplier<Options>> OPTIONS = new EnumMap<>(CommandName.class) {{
         put(EXECUTE, () -> {
@@ -42,7 +43,20 @@ public class CommandLineOptionPresets {
 
             return options;
         });
-        put(HELP, Options::new);
+        put(INFO, () -> {
+            Options options = new Options();
+
+            options.addOption(DEFAULT_OPTION);
+
+            return options;
+        });
+        put(HELP, () -> {
+            Options options = new Options();
+
+            options.addOption(DEFAULT_OPTION);
+
+            return options;
+        });
     }};
 
     public static Options toOptions(CommandName command) {

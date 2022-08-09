@@ -6,6 +6,7 @@ public enum CommandName {
     EXECUTE("execute", "exec", "run"),
     HELP("help"),
     ABOUT("about"),
+    INFO("info"),
     PRINT_ENV("env", "show-env");
 
     private final String[] names;
