@@ -17,7 +17,7 @@ config:
 properties:
   hello: "Hello World!!!"
   youtube: "youtube.com"
-  JAVA_BIN: "${env:JAVA_HOME}bin/java"
+  JAVA_BIN: "${env:JAVA_HOME}/bin/java"
 
 scripts:
   all:
