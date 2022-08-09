@@ -1,8 +1,21 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-JAR_BIN=${SCRIPT_DIR}/bin/build.jar
-JAR_SRC=${SCRIPT_DIR}/target/build.jar
+SOURCE=${BASH_SOURCE[0]}
+
+while [ -L "$SOURCE" ]; do
+  TARGET=$(readlink "$SOURCE")
+  if [[ $TARGET == /* ]]; then
+    SOURCE=$TARGET
+  else
+    DIR=$( dirname "$SOURCE" )
+    SOURCE=$DIR/$TARGET
+  fi
+done
+
+R_DIR=$( dirname "$SOURCE" )
+DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+JAR_BIN=${DIR}/bin/build.jar
+JAR_SRC=${DIR}/target/build.jar
 
 maven_build() {
   echo "START BUILD!"
