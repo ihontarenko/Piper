@@ -16,7 +16,7 @@ public class Piper {
             CommandFactory.getCommand(context.getCurrentCommandName()).execute(context.getParsedLine());
         } catch (Exception e) {
             ColoredPrinterConsumer consumer = new ColoredPrinterConsumer(AnsiColors.RED_BOLD_BRIGHT, System.out::println);
-            consumer.accept(format(" [ %s ] ", e.getMessage().toUpperCase()));
+            consumer.accept(format(" [ %s ] ", e.getMessage()));
         }
     }
 

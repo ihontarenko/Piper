@@ -1,0 +1,25 @@
+version: Beta0
+
+config:
+  os: linux
+  sub_script_prefix: "@"
+
+properties:
+  title: "Ubuntu Local Server - Services"
+  youtube: "youtube.com"
+  JAVA_BIN: "${env:JAVA_HOME}/bin/java"
+
+scripts:
+  show-all:
+    description: "Run All"
+    steps:
+      - "@show-free-space"
+      - "@u-name"
+  show-free-space:
+    description: "Show Free Spaces on Servers"
+    steps:
+      - "df -h"
+  u-name:
+    description: "Show OS Name"
+    steps:
+      - "uname -a"
