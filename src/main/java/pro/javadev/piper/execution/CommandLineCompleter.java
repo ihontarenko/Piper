@@ -44,7 +44,7 @@ public class CommandLineCompleter implements Converter<String, String> {
 
     @Override
     public String convert(String input) {
-        return StringSubstitutor.replace(input.replace("\r", ""), flatten());
+        return StringSubstitutor.replace(input, flatten());
     }
 
 }

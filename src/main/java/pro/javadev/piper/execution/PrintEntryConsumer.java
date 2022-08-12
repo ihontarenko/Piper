@@ -10,7 +10,7 @@ public class PrintEntryConsumer implements Consumer<Entry> {
 
     @Override
     public void accept(Entry entry) {
-        CONSUMER.accept(format("[#%06d] %s", entry.ordinal(), entry.line()));
+        CONSUMER.accept(format("[#%06d] %s", entry.ordinal(), entry.line().trim()));
     }
 
 }
