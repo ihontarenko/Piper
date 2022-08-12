@@ -1,13 +1,5 @@
-version: Beta0
-
 config:
-  os: linux
-  sub_script_prefix: "@"
-
-properties:
-  title: "Ubuntu Local Server - Services"
-  youtube: "youtube.com"
-  JAVA_BIN: "${env:JAVA_HOME}/bin/java"
+  name: "ubuntu"
 
 scripts:
   show-all:

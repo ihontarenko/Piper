@@ -1,7 +1,5 @@
 package pro.javadev.piper.configurator;
 
-import pro.javadev.piper.common.KeyValues;
-
 import static java.lang.String.format;
 
 public class TypeMismatchException extends Error {

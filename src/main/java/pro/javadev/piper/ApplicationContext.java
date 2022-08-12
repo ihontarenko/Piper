@@ -31,6 +31,8 @@ public interface ApplicationContext {
 
     Map<String, Holder> getProperties();
 
+    Holder getPiperConfigurator();
+
     final class Context implements ApplicationContext {
 
         final Registry<String, Script> scripts       = new Registry<>();
@@ -38,6 +40,7 @@ public interface ApplicationContext {
         final Version                  version       = new Version();
         final List<String>             arguments     = new ArrayList<>();
         final Map<String, Object>      values        = new HashMap<>();
+        final Holder                   configurator  = Holder.of(null);
         final Map<String, Holder>      properties    = new HashMap<>() {{
             put(Constants.CURRENT_COMMAND_NAME, Holder.of(null));
             put(Constants.PARSED_LINE, Holder.of(null));
@@ -83,6 +86,10 @@ public interface ApplicationContext {
             return values;
         }
 
+        @Override
+        public Holder getPiperConfigurator() {
+            return configurator;
+        }
     }
 
 }

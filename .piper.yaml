@@ -1,7 +1,5 @@
 version: Beta0
 
-#extends:
-#  - ".piper/dev-setup.yml"
 #
 # $ piper run cd-status start-mariadb
 #
@@ -10,12 +8,16 @@ version: Beta0
 # ${cfg:sub_script_prefix} - configs
 # ${env:JAVA_HOME} - envs
 
+extends:
+  - ".piper/.piper.dev.yaml"
+  - ".piper/.piper.ubuntu.yaml"
+
 config:
   os: linux
   sub_script_prefix: "@"
 
 properties:
-  hello: "Hello Dude!!!"
+  hello: "Hello ${cfg:name}!!!"
   youtube: "youtube.com"
   JAVA_BIN: "${env:JAVA_HOME}/bin/java"
 

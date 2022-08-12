@@ -27,6 +27,9 @@ public class PiperConfigurator extends BaseConfigurator {
             case SCRIPTS:
                 configurator.handle(node, of(context.getScripts()));
                 break;
+            case EXTENDS:
+                configurator.handle(node, of(context));
+                break;
             case CONFIG:
                 configurator.handle(node, of(context.getConfiguration()));
                 break;
@@ -40,6 +43,7 @@ public class PiperConfigurator extends BaseConfigurator {
     public Map<Keyword, Class<?>> configurator() {
         return new EnumMap<>(Keyword.class) {{
             put(VERSION, VersionConfigurator.class);
+            put(EXTENDS, ExtendsConfigurator.class);
             put(SCRIPTS, ScriptsConfigurator.class);
             put(ENVIRONMENT, KeyValuesConfigurator.class);
             put(CONFIG, KeyValuesConfigurator.class);
@@ -49,7 +53,7 @@ public class PiperConfigurator extends BaseConfigurator {
     @Override
     public Keyword[] keywords() {
         return new Keyword[]{
-                VERSION, SCRIPTS, ENVIRONMENT, CONFIG
+                EXTENDS, VERSION, SCRIPTS, ENVIRONMENT, CONFIG
         };
     }
 }

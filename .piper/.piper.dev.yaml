@@ -1,0 +1,9 @@
+config:
+  name: "dev"
+
+scripts:
+  java-version:
+    description: "Java Version"
+    steps:
+      - "echo ${ppty.hello}"
+      - "${ppty.JAVA_BIN} -version"

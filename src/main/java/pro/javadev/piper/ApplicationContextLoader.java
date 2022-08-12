@@ -59,8 +59,11 @@ public class ApplicationContextLoader implements Loader<String[], ApplicationCon
                                 .add(new StepsConfigurator())
                         )
                 )
+                .add(new ExtendsConfigurator())
                 .add(new KeyValuesConfigurator())
         );
+
+        context.getPiperConfigurator().set(root);
 
         root.handle(node, of(context));
 

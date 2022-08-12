@@ -7,6 +7,7 @@ public enum Keyword {
     ENVIRONMENT("environment", "env", "properties"),
     SCRIPTS("scripts"),
     CONFIG("cfg", "config", "configuration"),
+    EXTENDS("extends", "include", "based_on"),
 
     // script's keywords,
     STEPS("steps", "lines"),
