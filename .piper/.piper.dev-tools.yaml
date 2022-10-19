@@ -1,0 +1,13 @@
+config:
+  name: "dev"
+
+properties:
+  jenkins-port-1: "8040"
+  jenkins-port-2: "50000"
+
+scripts:
+  docker-jenkins:
+    description: "Jenkins Docker"
+    steps:
+      - "docker pull jenkins/jenkins:lts-jdk11"
+      - "docker run -d -v jenkins_home:/var/jenkins_home -p ${ppty:jenkins-port-1}:8080 -p ${ppty:jenkins-port-2}:50000 --restart=on-failure jenkins/jenkins:lts-jdk11"

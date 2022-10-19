@@ -80,4 +80,8 @@ public interface Node<N extends Node<N>> {
         }
     }
 
+    enum Direction {
+        IN_DEEP,
+    }
+
 }

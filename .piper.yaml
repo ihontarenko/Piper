@@ -11,6 +11,7 @@ version: Beta0
 extends:
   - ".piper/.piper.dev.yaml"
   - ".piper/.piper.ubuntu.yaml"
+  - ".piper/.piper.dev-tools.yaml"
 
 config:
   os: linux
