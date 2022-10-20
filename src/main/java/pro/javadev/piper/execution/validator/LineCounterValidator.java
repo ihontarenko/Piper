@@ -32,4 +32,9 @@ public class LineCounterValidator extends AbstractValidator {
         setThreshold((Integer) parameters.get("threshold"));
     }
 
+    @Override
+    public String toString() {
+        return String.format("[THRESHOLD: %d]", threshold);
+    }
+
 }

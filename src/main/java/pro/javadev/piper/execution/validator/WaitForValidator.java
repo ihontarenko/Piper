@@ -54,4 +54,8 @@ public class WaitForValidator extends AbstractValidator {
         this.unit = unit;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%d %s]", duration, unit);
+    }
 }

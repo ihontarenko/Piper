@@ -34,4 +34,9 @@ public class ExpectedStringValidator extends AbstractValidator {
         addExpected(((List<String>) parameters.get("text")));
     }
 
+    @Override
+    public String toString() {
+        return String.format("[STOP WORD: '%s']", expected);
+    }
+
 }

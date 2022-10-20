@@ -18,7 +18,7 @@ public abstract class AbstractValidator implements Validator {
     protected void stopProcess(ExecutionContext context) {
         context.getProcess().destroyForcibly();
         context.toState(READY_TO_DIE);
-        PRINTER.accept(format("PRECESS STOPPED [%s]", getClass().getCanonicalName()));
+        PRINTER.accept(format("PROCESS STOPPED BY %s WITH PARAMETERS: %s", getClass().getSimpleName(), this));
     }
 
 }
